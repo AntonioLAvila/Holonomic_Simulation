@@ -1,0 +1,5 @@
+ 
+LEFT_Y	negative is forward	3	SLIDER	Y Axis	0	1.0	0.1
+LEFT_X	positive is right	3	SLIDER	X Axis	0	1.0	0.1
+RIGHT_Y	negative is forward	3	SLIDER	Y Rotation	0	1.0	0.1
+RIGHT_X	positive is right	3	SLIDER	X Rotation	0	1.0	0.1

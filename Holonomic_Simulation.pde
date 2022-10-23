@@ -1,17 +1,40 @@
+import net.java.games.input.*;
+import org.gamecontrolplus.*;
+import org.gamecontrolplus.gui.*;
+
+ControlIO control;
+ControlDevice XboxController;
+
 public DriveTrain drive;
 
-PVector v = new PVector(50,20);
+PVector translate = new PVector(0,0);
 float rotate = 0;
+float scaleFactor = 20;
 
 void setup(){
-    size(1920, 1080);
-    background(#303134);
-    drive = new DriveTrain();
+  size(1920, 1080);
+  background(#303134);
+  drive = new DriveTrain();
+  
+  control = ControlIO.getInstance(this);
+  XboxController = control.getMatchedDevice("Xbox_Controller");
+  if(XboxController == null){
+    println("No such controller exists");
+  }
+}
+
+
+public void getInput(){
+  translate.set(XboxController.getSlider("LEFT_X").getValue() * scaleFactor,
+                -XboxController.getSlider("LEFT_Y").getValue() * scaleFactor);
+  rotate = XboxController.getSlider("RIGHT_X").getValue();
 }
 
 void draw(){
-    drive.drawDrive();
-    drive.updatePos(v, rotate);
-    //background(#303134);
-
+  //processing
+  getInput();
+  drive.updatePos(translate, rotate);
+  //drawing
+  background(#303134);
+  drive.drawDrive();
 }

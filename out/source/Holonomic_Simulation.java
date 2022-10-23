@@ -17,6 +17,9 @@ public class Holonomic_Simulation extends PApplet {
 
 public DriveTrain drive;
 
+PVector v = new PVector(50,20);
+float rotate = 0;
+
  public void setup(){
     /* size commented out by preprocessor */;
     background(0xFF303134);
@@ -24,35 +27,93 @@ public DriveTrain drive;
 }
 
  public void draw(){
+    drive.drawDrive();
+    drive.updatePos(v, rotate);
+    //background(#303134);
 
-    shape(drive.baseShape, 100, 100);
 }
 public class DriveTrain{
 
-    public PShape baseShape;
-    private scale;
+  private PShape baseShape;
+  private float scale = 20;
+  private boolean debug = false;
+  
+  //0--------1
+  //|        |
+  //|        |
+  //3--------2
+  private float[] wheelPowers = new float[]{0,0,0,0};
+  private PVector basePos = new PVector(width/2, height/2);
+  private final PVector[] wheelPos = new PVector[]{new PVector(-2.5f*scale,-2.5f*scale), new PVector(2.5f*scale,-2.5f*scale), new PVector(2.5f*scale,2.5f*scale), new PVector(-2.5f*scale,2.5f*scale)};
+  private final PVector[] wheelUnitVectors = new PVector[]{new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2)), new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2))};
+  private PVector[] wheelVectors = new PVector[]{new PVector(0,0), new PVector(0,0), new PVector(0,0), new PVector(0,0)};
 
-    public DriveTrain(){
-        initBase();
+  public DriveTrain(){
+    populateBaseShape(scale);
+  }
+
+  private void populateBaseShape(float scaleFactor){
+      baseShape = createShape();
+      baseShape.beginShape();
+      baseShape.vertex(-2*scaleFactor,-3*scaleFactor);
+      baseShape.vertex(-3*scaleFactor,-2*scaleFactor);
+      baseShape.vertex(-3*scaleFactor,2*scaleFactor);
+      baseShape.vertex(-2*scaleFactor,3*scaleFactor);
+      baseShape.vertex(2*scaleFactor,3*scaleFactor);
+      baseShape.vertex(3*scaleFactor,2*scaleFactor);
+      baseShape.vertex(3*scaleFactor,-2*scaleFactor);
+      baseShape.vertex(2*scaleFactor,-3*scaleFactor);
+      baseShape.endShape();
+  }
+  
+  //translate is the vector corresponding to controller input
+  //rotate is on [-1,1] describes how fast to rotate
+  private void updateWheelVectors(PVector translate, float rotate){      
+    wheelPowers[0] = rotate + translate.dot(wheelUnitVectors[0]);
+    wheelPowers[1] = -rotate + translate.dot(wheelUnitVectors[1]);
+    wheelPowers[2] = rotate + translate.dot(wheelUnitVectors[2]);
+    wheelPowers[3] = -rotate + translate.dot(wheelUnitVectors[3]);
+    
+    for(int i = 0; i < wheelVectors.length; i++){
+      wheelVectors[i].set(wheelUnitVectors[i].x*wheelPowers[i], wheelUnitVectors[i].y*wheelPowers[i]);
+    }
+    
+    if(debug){
+      System.out.print(wheelPowers[0]+" ");
+      System.out.print(wheelPowers[1]+" ");
+      System.out.print(wheelPowers[2]+" ");
+      System.out.println(wheelPowers[3]);
     }
 
-    public void drawBase(PVector pos, double scaleFactor){
-        baseShape = createShape();
-        baseShape.beginShape();
-        baseShape.vertex(-2*scaleFactor,-3*scaleFactor);
-        baseShape.vertex(-3*scaleFactor,-2*scaleFactor);
-        baseShape.vertex(-3*scaleFactor,2*scaleFactor);
-        baseShape.vertex(-2*scaleFactor,3*scaleFactor);
-        baseShape.vertex(2*scaleFactor,3*scaleFactor);
-        baseShape.vertex(3*scaleFactor,2*scaleFactor);
-        baseShape.vertex(3*scaleFactor,-2*scaleFactor);
-        baseShape.vertex(2*scaleFactor,-3*scaleFactor);
-        baseShape.endShape(CLOSE);
+  }
+  
+  float xTot = 0;
+  float yTot = 0;
+  //experimental
+  public void updatePos(PVector translate, float rotate){
+    updateWheelVectors(translate, rotate);
+    for(int i = 0; i < wheelVectors.length; i++){
+      xTot += wheelVectors[i].x;
+      yTot += wheelVectors[i].y;
     }
+    basePos.set(xTot/4, yTot/4);
+  }
+  
+  public void drawDrive(){
+    shape(baseShape, basePos.x, basePos.y);
+    
+    //drive "wheels" and vectors
+    for(int i = 0; i < wheelPos.length; i++){
+      circle(wheelPos[i].x + basePos.x, wheelPos[i].y + basePos.y, 10);
+      line(wheelPos[i].x + basePos.x,
+            wheelPos[i].y + basePos.y,
+            wheelPos[i].x + basePos.x + wheelVectors[i].x,
+            wheelPos[i].y + basePos.y - wheelVectors[i].y);
+    }
+  }
+    
+    
 
-    private initBase(){
-        drawBase(screen.width/2, screen.height/2);
-    }
 }
 
 
