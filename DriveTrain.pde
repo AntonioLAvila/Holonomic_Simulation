@@ -21,6 +21,7 @@ public class DriveTrain{
   private void populateBaseShape(float scaleFactor){
       baseShape = createShape();
       baseShape.beginShape();
+      baseShape.fill(0, 0, 255);
       baseShape.vertex(-2*scaleFactor,-3*scaleFactor);
       baseShape.vertex(-3*scaleFactor,-2*scaleFactor);
       baseShape.vertex(-3*scaleFactor,2*scaleFactor);
@@ -29,16 +30,16 @@ public class DriveTrain{
       baseShape.vertex(3*scaleFactor,2*scaleFactor);
       baseShape.vertex(3*scaleFactor,-2*scaleFactor);
       baseShape.vertex(2*scaleFactor,-3*scaleFactor);
-      baseShape.endShape();
+      baseShape.endShape(CLOSE);
   }
   
   //translate is the vector corresponding to controller input
   //rotate is on [-1,1] describes how fast to rotate
   private void updateWheelVectors(PVector translate, float rotate){      
-    wheelPowers[0] = translate.dot(wheelUnitVectors[0]) * rotate;
-    wheelPowers[1] = translate.dot(wheelUnitVectors[1]) * rotate;
-    wheelPowers[2] = translate.dot(wheelUnitVectors[2]) * rotate;
-    wheelPowers[3] = translate.dot(wheelUnitVectors[3]) * rotate;
+    wheelPowers[0] = translate.dot(wheelUnitVectors[0]);
+    wheelPowers[1] = translate.dot(wheelUnitVectors[1]);
+    wheelPowers[2] = translate.dot(wheelUnitVectors[2]);
+    wheelPowers[3] = translate.dot(wheelUnitVectors[3]);
     
     for(int i = 0; i < wheelVectors.length; i++){
       wheelVectors[i].set(wheelUnitVectors[i].x*wheelPowers[i], wheelUnitVectors[i].y*wheelPowers[i]);
@@ -72,7 +73,7 @@ public class DriveTrain{
     
     //drive "wheels" and vectors
     for(int i = 0; i < wheelPos.length; i++){
-      circle(wheelPos[i].x + basePos.x, wheelPos[i].y + basePos.y, 10);
+      circle(wheelPos[i].x + basePos.x, wheelPos[i].y + basePos.y, 5);
       line(wheelPos[i].x + basePos.x,
             wheelPos[i].y + basePos.y,
             wheelPos[i].x + basePos.x + (wheelVectors[i].x * 5),

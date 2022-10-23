@@ -21,6 +21,8 @@ void setup(){
   if(XboxController == null){
     println("No such controller exists");
   }
+  strokeWeight(5);
+
 }
 
 
