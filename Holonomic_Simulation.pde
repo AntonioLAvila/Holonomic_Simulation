@@ -1,6 +1,6 @@
 public DriveTrain drive;
 
-PVector v = new PVector(0,100);
+PVector v = new PVector(50,20);
 float rotate = 0;
 
 void setup(){
@@ -11,11 +11,7 @@ void setup(){
 
 void draw(){
     drive.drawDrive();
-    //drive.updatePos(vec, rotate);
+    drive.updatePos(v, rotate);
     //background(#303134);
 
-}
-
-void mouseClicked(){
-  drive.updatePos(v, rotate);
 }

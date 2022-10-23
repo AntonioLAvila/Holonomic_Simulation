@@ -1,7 +1,8 @@
 public class DriveTrain{
 
-    public PShape baseShape;
+    private PShape baseShape;
     private float scale = 20;
+    private boolean debug = false;
     
     //0--------1
     //|        |
@@ -43,21 +44,13 @@ public class DriveTrain{
         wheelVectors[i].set(wheelUnitVectors[i].x*wheelPowers[i], wheelUnitVectors[i].y*wheelPowers[i]);
       }
       
-      System.out.print(wheelPowers[0]+" ");
-      System.out.print(wheelPowers[1]+" ");
-      System.out.print(wheelPowers[2]+" ");
-      System.out.println(wheelPowers[3]);
+      if(debug){
+        System.out.print(wheelPowers[0]+" ");
+        System.out.print(wheelPowers[1]+" ");
+        System.out.print(wheelPowers[2]+" ");
+        System.out.println(wheelPowers[3]);
+      }
 
-    }
-    
-    private void drawDriveVectors(){
-      for(int i = 0; i < wheelPos.length; i++){
-        circle(wheelPos[i].x + basePos.x, wheelPos[i].y + basePos.y, 10);
-        line(wheelPos[i].x + basePos.x,
-             wheelPos[i].y + basePos.y,
-             wheelPos[i].x + basePos.x + wheelVectors[i].x,
-             wheelPos[i].y + basePos.y - wheelVectors[i].y);
-      }     
     }
     
     //experimental
@@ -66,8 +59,16 @@ public class DriveTrain{
     }
     
     public void drawDrive(){
-      drawDriveVectors();
       shape(baseShape, basePos.x, basePos.y);
+      
+      //drive "wheels" and vectors
+      for(int i = 0; i < wheelPos.length; i++){
+        circle(wheelPos[i].x + basePos.x, wheelPos[i].y + basePos.y, 10);
+        line(wheelPos[i].x + basePos.x,
+             wheelPos[i].y + basePos.y,
+             wheelPos[i].x + basePos.x + wheelVectors[i].x,
+             wheelPos[i].y + basePos.y - wheelVectors[i].y);
+      }
     }
     
     
