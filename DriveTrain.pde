@@ -2,7 +2,8 @@ public class DriveTrain{
 
   private PShape baseShape;
   private float scale = 20;
-  private boolean debug = false;
+  private boolean debug;
+  private float fudgeFactor;
   
   //0--------1
   //|        |
@@ -14,8 +15,14 @@ public class DriveTrain{
   private final PVector[] wheelUnitVectors = new PVector[]{new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2)), new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2))};
   private PVector[] wheelVectors = new PVector[]{new PVector(0,0), new PVector(0,0), new PVector(0,0), new PVector(0,0)};
 
-  public DriveTrain(){
+  public DriveTrain(boolean debug, boolean fudgeVisuals){
     populateBaseShape(scale);
+    this.debug = debug;
+    if(fudgeVisuals){
+      fudgeFactor = 5;
+    }else{
+      fudgeFactor = 1;
+    }
   }
 
   private void populateBaseShape(float scaleFactor){
@@ -76,13 +83,14 @@ public class DriveTrain{
       circle(wheelPos[i].x + basePos.x, wheelPos[i].y + basePos.y, 5);
       line(wheelPos[i].x + basePos.x,
             wheelPos[i].y + basePos.y,
-            wheelPos[i].x + basePos.x + (wheelVectors[i].x * 5),
-            wheelPos[i].y + basePos.y - (wheelVectors[i].y * 5));
+            wheelPos[i].x + basePos.x + (wheelVectors[i].x * fudgeFactor),
+            wheelPos[i].y + basePos.y - (wheelVectors[i].y * fudgeFactor));
     }
     
     //show vectors
     for(int i = 0; i < wheelVectors.length; i++){
-      text("Wheel " + (i+1) + "| Power: " + wheelPowers[i] + " Vector: <" + wheelVectors[i].x + ", " + wheelVectors[i].y + ">" , 10, 30+30*i);
+      text("Power " + (i+1) + ": " + wheelPowers[i], 10, 30+30*i);
+      text("Vector "  + (i+1) + ": <" + wheelVectors[i].x + ", " + wheelVectors[i].y + ">" , 200, 30+30*i);
     }
   }
     

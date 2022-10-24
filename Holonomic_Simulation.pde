@@ -9,12 +9,12 @@ public DriveTrain drive;
 
 PVector translate = new PVector(0,0);
 float rotate = 0;
-float scaleFactor = 20;
+float scaleFactor = 10;
 
 void setup(){
   size(1920, 1080);
   background(#303134);
-  drive = new DriveTrain();
+  drive = new DriveTrain(false, true);
   
   control = ControlIO.getInstance(this);
   XboxController = control.getMatchedDevice("Xbox_Controller");
