@@ -22,14 +22,7 @@ void setup(){
     println("No such controller exists");
   }
   strokeWeight(5);
-
-}
-
-
-public void getInput(){
-  translate.set(XboxController.getSlider("LEFT_X").getValue() * scaleFactor,
-                -XboxController.getSlider("LEFT_Y").getValue() * scaleFactor);
-  rotate = XboxController.getSlider("RIGHT_X").getValue();
+  textSize(20);
 }
 
 void draw(){
@@ -39,4 +32,11 @@ void draw(){
   //drawing
   background(#303134);
   drive.drawDrive();
+}
+
+
+public void getInput(){
+  translate.set(XboxController.getSlider("LEFT_X").getValue() * scaleFactor,
+                -XboxController.getSlider("LEFT_Y").getValue() * scaleFactor);
+  rotate = XboxController.getSlider("RIGHT_X").getValue();
 }
