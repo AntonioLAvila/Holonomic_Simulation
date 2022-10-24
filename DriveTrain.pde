@@ -79,6 +79,11 @@ public class DriveTrain{
             wheelPos[i].x + basePos.x + (wheelVectors[i].x * 5),
             wheelPos[i].y + basePos.y - (wheelVectors[i].y * 5));
     }
+    
+    //show vectors
+    for(int i = 0; i < wheelVectors.length; i++){
+      text("Wheel " + (i+1) + "| Power: " + wheelPowers[i] + " Vector: <" + wheelVectors[i].x + ", " + wheelVectors[i].y + ">" , 10, 30+30*i);
+    }
   }
     
     
