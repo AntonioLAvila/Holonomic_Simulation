@@ -2,8 +2,8 @@ public class DriveTrain{
 
   private PShape baseShape;
   private float scale = 20;
-  private boolean debug;
   private float fudgeFactor;
+  private float rotate;
   
   //0--------1
   //|        |
@@ -15,9 +15,8 @@ public class DriveTrain{
   private final PVector[] wheelUnitVectors = new PVector[]{new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2)), new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2))};
   private PVector[] wheelVectors = new PVector[]{new PVector(0,0), new PVector(0,0), new PVector(0,0), new PVector(0,0)};
 
-  public DriveTrain(boolean debug, boolean fudgeVisuals){
-    populateBaseShape(scale);
-    this.debug = debug;
+  public DriveTrain( boolean fudgeVisuals){
+    populateBaseShape();
     if(fudgeVisuals){
       fudgeFactor = 5;
     }else{
@@ -25,40 +24,35 @@ public class DriveTrain{
     }
   }
 
-  private void populateBaseShape(float scaleFactor){
+  private void populateBaseShape(){
       baseShape = createShape();
       baseShape.beginShape();
       baseShape.fill(0, 0, 255);
-      baseShape.vertex(-2*scaleFactor,-3*scaleFactor);
-      baseShape.vertex(-3*scaleFactor,-2*scaleFactor);
-      baseShape.vertex(-3*scaleFactor,2*scaleFactor);
-      baseShape.vertex(-2*scaleFactor,3*scaleFactor);
-      baseShape.vertex(2*scaleFactor,3*scaleFactor);
-      baseShape.vertex(3*scaleFactor,2*scaleFactor);
-      baseShape.vertex(3*scaleFactor,-2*scaleFactor);
-      baseShape.vertex(2*scaleFactor,-3*scaleFactor);
+      baseShape.vertex(-2*scale,-3*scale);
+      baseShape.vertex(-3*scale,-2*scale);
+      baseShape.vertex(-3*scale,2*scale);
+      baseShape.vertex(-2*scale,3*scale);
+      baseShape.vertex(2*scale,3*scale);
+      baseShape.vertex(3*scale,2*scale);
+      baseShape.vertex(3*scale,-2*scale);
+      baseShape.vertex(2*scale,-3*scale);
       baseShape.endShape(CLOSE);
   }
   
   //translate is the vector corresponding to controller input
   //rotate is on [-1,1] describes how fast to rotate
-  private void updateWheelVectors(PVector translate, float rotate){      
-    wheelPowers[0] = translate.dot(wheelUnitVectors[0]);
-    wheelPowers[1] = translate.dot(wheelUnitVectors[1]);
-    wheelPowers[2] = translate.dot(wheelUnitVectors[2]);
-    wheelPowers[3] = translate.dot(wheelUnitVectors[3]);
+  private void updateWheelVectors(PVector translate, float rotate){          
+    wheelPowers[0] = translate.dot(wheelUnitVectors[0]) + rotate;
+    wheelPowers[1] = translate.dot(wheelUnitVectors[1]) - rotate;
+    wheelPowers[2] = translate.dot(wheelUnitVectors[2]) - rotate;
+    wheelPowers[3] = translate.dot(wheelUnitVectors[3]) + rotate;
+    
+    this.rotate = rotate;
+    
     
     for(int i = 0; i < wheelVectors.length; i++){
       wheelVectors[i].set(wheelUnitVectors[i].x*wheelPowers[i], wheelUnitVectors[i].y*wheelPowers[i]);
     }
-    
-    if(debug){
-      System.out.print(wheelPowers[0]+" ");
-      System.out.print(wheelPowers[1]+" ");
-      System.out.print(wheelPowers[2]+" ");
-      System.out.println(wheelPowers[3]);
-    }
-
   }
   
   float xTot = 0;

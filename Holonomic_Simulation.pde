@@ -9,12 +9,12 @@ public DriveTrain drive;
 
 PVector translate = new PVector(0,0);
 float rotate = 0;
-float scaleFactor = 10;
+float speed = 20;  //speed wrt to realtime
 
 void setup(){
   size(1920, 1080);
   background(#303134);
-  drive = new DriveTrain(false, true);
+  drive = new DriveTrain(true);
   
   control = ControlIO.getInstance(this);
   XboxController = control.getMatchedDevice("Xbox_Controller");
@@ -36,7 +36,7 @@ void draw(){
 
 
 public void getInput(){
-  translate.set(XboxController.getSlider("LEFT_X").getValue() * scaleFactor,
-                -XboxController.getSlider("LEFT_Y").getValue() * scaleFactor);
-  rotate = XboxController.getSlider("RIGHT_X").getValue();
+  translate.set(XboxController.getSlider("LEFT_X").getValue() * speed,
+                -XboxController.getSlider("LEFT_Y").getValue() * speed);
+  rotate = XboxController.getSlider("RIGHT_X").getValue() * speed;
 }
