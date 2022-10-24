@@ -17,21 +17,25 @@ public class DriveTrain{
   private PVector[] wheelVectors = new PVector[]{new PVector(0,0), new PVector(0,0), new PVector(0,0), new PVector(0,0)};
 
   public DriveTrain(){
-    populateBaseShape(scale);
+    populateBaseShape();
   }
 
-  private void populateBaseShape(float scaleFactor){
+  //base this on wheelPos[]
+  private void populateBaseShape(){
       baseShape = createShape();
       baseShape.beginShape();
       baseShape.fill(0, 0, 255);
-      baseShape.vertex(-2*scaleFactor,-3*scaleFactor);
-      baseShape.vertex(-3*scaleFactor,-2*scaleFactor);
-      baseShape.vertex(-3*scaleFactor,2*scaleFactor);
-      baseShape.vertex(-2*scaleFactor,3*scaleFactor);
-      baseShape.vertex(2*scaleFactor,3*scaleFactor);
-      baseShape.vertex(3*scaleFactor,2*scaleFactor);
-      baseShape.vertex(3*scaleFactor,-2*scaleFactor);
-      baseShape.vertex(2*scaleFactor,-3*scaleFactor);
+      baseShape.vertex(wheelPos[0].x - 0.5*scale, wheelPos[0].y + 0.5*scale);
+      baseShape.vertex(wheelPos[0].x + 0.5*scale, wheelPos[0].y - 0.5*scale);
+      
+      baseShape.vertex(wheelPos[1].x - 0.5*scale, wheelPos[1].y - 0.5*scale);
+      baseShape.vertex(wheelPos[1].x + 0.5*scale, wheelPos[1].y + 0.5*scale);
+      
+      baseShape.vertex(wheelPos[2].x + 0.5*scale, wheelPos[2].y - 0.5*scale);
+      baseShape.vertex(wheelPos[2].x - 0.5*scale, wheelPos[2].y + 0.5*scale);
+      
+      baseShape.vertex(wheelPos[3].x + 0.5*scale, wheelPos[3].y + 0.5*scale);
+      baseShape.vertex(wheelPos[3].x - 0.5*scale, wheelPos[3].y - 0.5*scale);
       baseShape.endShape(CLOSE);
   }
   
@@ -58,28 +62,23 @@ public class DriveTrain{
   
   float xTot = 0;
   float yTot = 0;
-  //experimental
   public void updatePos(PVector translate, float rotate){
     updateWheelVectors(translate, rotate);
-    xTot = 0;
-    yTot = 0;
-    for(int i = 0; i < wheelVectors.length; i++){
-      xTot += wheelVectors[i].x;
-      yTot += wheelVectors[i].y;
+    for(int i = 0; i < wheelPos.length; i++){
+      wheelPos[i].set(wheelPos[i].x + wheelVectors[i].x, wheelPos[i].y - wheelVectors[i].y);
     }
-    basePos.set(basePos.x + xTot/4, basePos.y - yTot/4);
   }
   
   public void drawDrive(){
-    shape(baseShape, basePos.x, basePos.y);
-    
+    shape(baseShape, (wheelPos[0].x + wheelPos[1].x)/2, (wheelPos[0].y + wheelPos[3].y)/2);
+    populateBaseShape();
     //drive "wheels" and vectors
     for(int i = 0; i < wheelPos.length; i++){
-      circle(wheelPos[i].x + basePos.x, wheelPos[i].y + basePos.y, 5);
-      line(wheelPos[i].x + basePos.x,
-            wheelPos[i].y + basePos.y,
-            wheelPos[i].x + basePos.x + (wheelVectors[i].x * 5),
-            wheelPos[i].y + basePos.y - (wheelVectors[i].y * 5));
+      circle(wheelPos[i].x, wheelPos[i].y, 5);
+      line(wheelPos[i].x,
+            wheelPos[i].y,
+            wheelPos[i].x + (wheelVectors[i].x * 5),
+            wheelPos[i].y - (wheelVectors[i].y * 5));
     }
     
     //show vectors
