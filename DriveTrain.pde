@@ -12,6 +12,8 @@ public class DriveTrain{
   private PVector basePos = new PVector(width/2, height/2);
   private final PVector[] wheelPos = new PVector[]{new PVector(-2.5*scale,-2.5*scale), new PVector(2.5*scale,-2.5*scale), new PVector(2.5*scale,2.5*scale), new PVector(-2.5*scale,2.5*scale)};
   private final PVector[] wheelUnitVectors = new PVector[]{new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2)), new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2))};
+  
+  //movement should now be based on these vectors
   private PVector[] wheelVectors = new PVector[]{new PVector(0,0), new PVector(0,0), new PVector(0,0), new PVector(0,0)};
 
   public DriveTrain(){
