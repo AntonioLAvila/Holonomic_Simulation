@@ -9,11 +9,8 @@ public class DriveTrain{
   //|        |
   //3--------2
   private float[] wheelPowers = new float[]{0,0,0,0};
-  private PVector basePos = new PVector(width/2, height/2);
-  private final PVector[] wheelPos = new PVector[]{new PVector(-2.5*scale,-2.5*scale), new PVector(2.5*scale,-2.5*scale), new PVector(2.5*scale,2.5*scale), new PVector(-2.5*scale,2.5*scale)};
+  private final PVector[] wheelPos = new PVector[]{new PVector(-2.5*scale + width/2, -2.5*scale + height/2), new PVector(2.5*scale + width/2, -2.5*scale + height/2), new PVector(2.5*scale + width/2, 2.5*scale + height/2), new PVector(-2.5*scale + width/2, 2.5*scale + height/2)};
   private final PVector[] wheelUnitVectors = new PVector[]{new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2)), new PVector(1/sqrt(2), 1/sqrt(2)), new PVector(-1/sqrt(2), 1/sqrt(2))};
-  
-  //movement should now be based on these vectors
   private PVector[] wheelVectors = new PVector[]{new PVector(0,0), new PVector(0,0), new PVector(0,0), new PVector(0,0)};
 
   public DriveTrain(){
@@ -70,8 +67,8 @@ public class DriveTrain{
   }
   
   public void drawDrive(){
-    shape(baseShape, (wheelPos[0].x + wheelPos[1].x)/2, (wheelPos[0].y + wheelPos[3].y)/2);
     populateBaseShape();
+    shape(baseShape, (wheelPos[0].x + wheelPos[1].x)/2, (wheelPos[0].y + wheelPos[3].y)/2);
     //drive "wheels" and vectors
     for(int i = 0; i < wheelPos.length; i++){
       circle(wheelPos[i].x, wheelPos[i].y, 5);
